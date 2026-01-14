@@ -17,4 +17,12 @@ git_sitrep()
 
 
 # Try making a local commit
+## By using the graphic interface
+## or the Terminal
 
+# Create a "local" folder and add to gitignore
+dir.create("local")
+usethis::use_git_ignore("local")
+
+# Create Github repository (Cloud)
+usethis::use_github()
