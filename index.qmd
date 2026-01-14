@@ -1,0 +1,63 @@
+---
+title: "R Malaria Example"
+format: html
+editor: visual
+---
+
+Adding libraries
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+```
+
+Read in our example malaria dataset.
+
+```{r}
+case_data <- read_csv("data/malaria_routine_data.csv")
+
+case_summary <- case_data %>%
+  mutate(positivity = positive_tests / tests_done) %>%
+  group_by(district) %>%
+  summarise(
+    total_cases = sum(suspected_cases),
+    mean_positivity = mean(positivity)
+  ) %>%
+  arrange(desc(total_cases))
+
+case_summary
+```
+
+
+Include a line plot for cases by month
+
+```{r}
+ggplot(case_data, aes(month, suspected_cases, color = district)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  labs(
+    title = "Suspected malaria cases by district",
+    x = "Month",
+    y = "Suspected cases"
+  ) +
+  theme_minimal()
+```
+
+Create an interactive version of this plot:
+
+```{r}
+interactive_plot <- ggplot(case_data, aes(month, suspected_cases, color = district)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  labs(
+    title = "Suspected malaria cases by district (interactive)",
+    x = "Month",
+    y = "Suspected cases"
+  ) +
+  theme_minimal()
+
+plotly::ggplotly(interactive_plot)
+```
+
